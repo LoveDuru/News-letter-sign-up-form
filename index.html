@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frontend sign-page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row" id="row">
+        <div class="box box1">
+          <h1 class="title">Stay updated!</h1>
+          <p class="heading">
+            Join 60,000+ product managers receiving monthly updates on:
+          </p>
+          <ul>
+            <li>
+              <img src="assets/images/icon-list.svg" />
+              <p>Product discovery and building what matters</p>
+            </li>
+            <li>
+              <img src="assets/images/icon-list.svg" />
+              <p>Measuring to ensure updates are a success</p>
+            </li>
+            <li>
+              <img src="assets/images/icon-list.svg" />
+              <p>And much more!</p>
+            </li>
+          </ul>
+
+          <div class="input-box">
+            <div class="labelerrmsgbox">
+              <label for="">Email address</label>
+              <p class="error-msg"></p>
+            </div>
+
+            <input
+              type="email"
+              class="email-input"
+              placeholder="abc@yamail.com"
+            />
+            <button id="btn" class="form-btn">
+              Subscribe to monthly letter
+            </button>
+          </div>
+        </div>
+        <picture class="img-box">
+          <source
+            media="(max-width: 375px )"
+            srcset="assets/images/illustration-sign-up-mobile.svg"
+          />
+          <img src="assets/images/illustration-sign-up-desktop.svg" alt="" />
+        </picture>
+      </div>
+      <div class="success-state" id="successState"></div>
+    </div>
+
+    <script>
+      const formBtn = document.getElementById("btn");
+      const successState = document.getElementById("successState");
+      const container = document.querySelector(".container");
+      const row = document.getElementById("row");
+      const email = document.querySelector(".email-input");
+      const errormsg = document.querySelector(".error-msg");
+
+      email.onfocus = function () {
+        errormsg.innerHTML = " ";
+        email.classList.remove("error-state");
+      };
+
+      email.oninput = function () {
+        let emailValue = email.value;
+
+        errormsg.innerHTML = " ";
+        email.classList.remove("error-state");
+        if (
+          emailValue.match(/^[A-Za-z\._\-[0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)
+        ) {
+          formBtn.classList.add("success-btn");
+          email.classList.remove("error-state");
+          errormsg.innerHTML = " ";
+          console.log(emailValue);
+        }
+        if (
+          !emailValue.match(/^[A-Za-z\._\-[0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)
+        ) {
+          formBtn.classList.remove("success-btn");
+        }
+      };
+
+      formBtn.onclick = function () {
+        let emailValue = email.value;
+        console.log(emailValue);
+
+        if (
+          emailValue.match(/^[A-Za-z\._\-[0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)
+        ) {
+          row.classList.add("active");
+          popcard(emailValue);
+          successState.style.display = "block";
+        } else if (emailValue.length === 0) {
+          errormsg.innerHTML = "put in email";
+          email.classList.add("error-state");
+        } else {
+          email.classList.add("error-state");
+          errormsg.innerHTML = "input valid email";
+          formBtn.classList.remove("success-btn");
+        }
+      };
+
+      function clearinput() {
+        emailValue = " ";
+      }
+
+      function popcard(emailmsg) {
+        const card = ` <div >
+                    <img src="./assets/images/icon-success.svg" alt="">
+                    <h2>Thanks for subcribing!</h2>
+                    <p>A confirmation letter has been sent to <span>${emailmsg}</span> to please open it and click the link in the letter to confirm your subscription.</p>
+                    <button type="button" class="dismiss-popcard">dismiss message</button>
+                    
+                </div>`;
+        successState.innerHTML = card;
+        const dismissPopcard = document.querySelector(".dismiss-popcard");
+
+        dismissPopcard.onclick = function () {
+          successState.style.display = "none";
+          row.classList.remove("active");
+          email.value = " ";
+          formBtn.classList.remove("success-btn");
+        };
+      }
+    </script>
+  </body>
+</html>
